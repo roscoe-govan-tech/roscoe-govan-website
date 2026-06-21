@@ -1,0 +1,252 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic character encoding -->
+  <meta charset="UTF-8" />
+
+  <!-- Makes the page responsive on phones and tablets -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Browser tab title -->
+  <title>Capstone Reader | Roscoe Govan</title>
+
+  <!-- Search engine and link-preview description -->
+  <meta
+    name="description"
+    content="Digital reader for Roscoe Govan's Western Governors University capstone report."
+  />
+
+  <!-- Main stylesheet stored in the assets/css folder -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+
+  <!-- PDF.js browser-compatible legacy build -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+
+<body>
+  <!-- Page header -->
+  <header class="hero">
+    <div class="container">
+
+      <!-- Main site navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="resume.html">Resume</a>
+        <a href="capstone.html">Capstone</a>
+
+        <a
+          href="https://www.linkedin.com/in/roscoegovan"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="external-link"
+        >
+          LinkedIn
+        </a>
+
+        <a href="youtube.html">YouTube</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+
+      <h1>Capstone Reader</h1>
+
+      <p class="subtitle">
+        Read my Western Governors University capstone report page by page.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <!-- PDF actions -->
+    <section class="section">
+      <div class="container">
+        <div class="hero-links">
+          <a
+            href="../assets/documents/Capstone_Written_Report_RoscoeGovan.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open PDF
+          </a>
+
+          <a
+            href="../assets/documents/Capstone_Written_Report_RoscoeGovan.pdf"
+            download
+          >
+            Download PDF
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Digital PDF reader -->
+    <section class="section alt">
+      <div class="container">
+        <div class="reader-controls">
+          <button id="prev-page" type="button">← Previous</button>
+          <span id="page-info">Loading PDF...</span>
+          <button id="next-page" type="button">Next →</button>
+        </div>
+
+        <div class="book-reader">
+          <canvas id="pdf-canvas"></canvas>
+        </div>
+
+        <p class="reader-note" id="reader-status">
+          If the reader does not load, use the Open PDF button above.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Page footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Roscoe Govan. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ----------------------------------------------------
+    // PDF file path
+    // ----------------------------------------------------
+    // capstone-reader.html is inside pages/, while the PDF
+    // is stored inside assets/documents/.
+    const pdfUrl =
+      "../assets/documents/Capstone_Written_Report_RoscoeGovan.pdf";
+
+    // ----------------------------------------------------
+    // PDF.js worker setup
+    // ----------------------------------------------------
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+    // ----------------------------------------------------
+    // DOM references
+    // ----------------------------------------------------
+    const canvas = document.getElementById("pdf-canvas");
+    const context = canvas.getContext("2d");
+    const pageInfo = document.getElementById("page-info");
+    const statusText = document.getElementById("reader-status");
+    const prevButton = document.getElementById("prev-page");
+    const nextButton = document.getElementById("next-page");
+
+    // ----------------------------------------------------
+    // Reader state
+    // ----------------------------------------------------
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPages = 0;
+    let isRendering = false;
+    let pendingPage = null;
+
+    // Controls the rendered PDF size
+    const scale = 1.4;
+
+    // ----------------------------------------------------
+    // Render a single PDF page
+    // ----------------------------------------------------
+    function renderPage(pageNumber) {
+      isRendering = true;
+
+      pdfDoc
+        .getPage(pageNumber)
+        .then(function (page) {
+          const viewport = page.getViewport({ scale });
+
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport
+          };
+
+          return page.render(renderContext).promise;
+        })
+        .then(function () {
+          isRendering = false;
+
+          pageInfo.textContent =
+            `Page ${currentPage} of ${totalPages}`;
+
+          prevButton.disabled = currentPage <= 1;
+          nextButton.disabled = currentPage >= totalPages;
+
+          if (pendingPage !== null) {
+            const nextPendingPage = pendingPage;
+            pendingPage = null;
+            renderPage(nextPendingPage);
+          }
+        })
+        .catch(function (error) {
+          console.error("PDF page-rendering error:", error);
+          isRendering = false;
+          statusText.textContent =
+            "The selected PDF page could not be rendered.";
+        });
+    }
+
+    // ----------------------------------------------------
+    // Queue rendering if another page is still rendering
+    // ----------------------------------------------------
+    function queueRenderPage(pageNumber) {
+      if (isRendering) {
+        pendingPage = pageNumber;
+      } else {
+        renderPage(pageNumber);
+      }
+    }
+
+    // ----------------------------------------------------
+    // Navigation handlers
+    // ----------------------------------------------------
+    function showPreviousPage() {
+      if (currentPage <= 1) {
+        return;
+      }
+
+      currentPage -= 1;
+      queueRenderPage(currentPage);
+    }
+
+    function showNextPage() {
+      if (currentPage >= totalPages) {
+        return;
+      }
+
+      currentPage += 1;
+      queueRenderPage(currentPage);
+    }
+
+    prevButton.addEventListener("click", showPreviousPage);
+    nextButton.addEventListener("click", showNextPage);
+
+    // ----------------------------------------------------
+    // Load the PDF
+    // ----------------------------------------------------
+    pdfjsLib
+      .getDocument(pdfUrl)
+      .promise
+      .then(function (pdf) {
+        pdfDoc = pdf;
+        totalPages = pdf.numPages;
+
+        statusText.textContent =
+          "Use the arrows to navigate through the report.";
+
+        renderPage(currentPage);
+      })
+      .catch(function (error) {
+        console.error("PDF load error:", error);
+
+        pageInfo.textContent = "Could not load PDF";
+
+        statusText.textContent =
+          "The PDF could not be loaded. Confirm that its filename and folder path exactly match the project structure.";
+      });
+  </script>
+</body>
+</html>
+```

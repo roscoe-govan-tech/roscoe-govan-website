@@ -1,0 +1,200 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Basic character encoding -->
+  <meta charset="UTF-8" />
+
+  <!-- Makes the page responsive on phones and tablets -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Browser tab title -->
+  <title>Contact | Roscoe Govan</title>
+
+  <!-- Search engine and link-preview description -->
+  <meta
+    name="description"
+    content="Contact Roscoe Govan regarding professional opportunities, technical discussions, and collaboration."
+  />
+
+  <!-- Main stylesheet stored in the assets/css folder -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+
+<body>
+  <!-- Page header -->
+  <header class="hero">
+    <div class="container">
+
+      <!-- Main site navigation -->
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="../index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="resume.html">Resume</a>
+        <a href="capstone.html">Capstone</a>
+
+        <a
+          href="https://www.linkedin.com/in/roscoegovan"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="external-link"
+        >
+          LinkedIn
+        </a>
+
+        <a href="youtube.html">YouTube</a>
+        <a href="contact.html" aria-current="page">Contact</a>
+      </nav>
+
+      <h1>Contact</h1>
+
+      <p class="subtitle">
+        Separate contact options for hiring managers and technical professionals.
+      </p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+
+        <!-- Introductory text -->
+        <p class="contact-intro">
+          Whether you are reaching out regarding a professional opportunity or
+          technical collaboration, please use the form that best matches the
+          reason for your visit.
+        </p>
+
+        <!-- Two-column contact layout -->
+        <div class="contact-split">
+
+          <!-- Hiring manager contact form -->
+          <div class="contact-panel">
+            <h2>For Hiring Managers</h2>
+
+            <p>
+              Use this form if you are reaching out regarding an interview,
+              role, recruiter outreach, or another professional opportunity.
+            </p>
+
+            <form class="contact-form" action="#" method="post">
+              <label for="hm-name">Name</label>
+              <input
+                type="text"
+                id="hm-name"
+                name="hm-name"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+              />
+
+              <label for="hm-company">Company</label>
+              <input
+                type="text"
+                id="hm-company"
+                name="hm-company"
+                placeholder="Company name"
+                autocomplete="organization"
+              />
+
+              <label for="hm-email">Email</label>
+              <input
+                type="email"
+                id="hm-email"
+                name="hm-email"
+                placeholder="your.email@example.com"
+                autocomplete="email"
+                required
+              />
+
+              <label for="hm-message">Message</label>
+              <textarea
+                id="hm-message"
+                name="hm-message"
+                rows="6"
+                placeholder="Tell me about the opportunity or reason for your outreach."
+                required
+              ></textarea>
+
+              <button type="submit">Send</button>
+            </form>
+          </div>
+
+          <!-- Technical professional contact form -->
+          <div class="contact-panel">
+            <h2>For Technical Professionals</h2>
+
+            <p>
+              Use this form if you are interested in connecting around
+              cybersecurity, shared learning, technical discussion, or possible
+              collaboration.
+            </p>
+
+            <form class="contact-form" action="#" method="post">
+              <label for="tp-name">Name</label>
+              <input
+                type="text"
+                id="tp-name"
+                name="tp-name"
+                placeholder="Your name"
+                autocomplete="name"
+                required
+              />
+
+              <label for="tp-email">Email</label>
+              <input
+                type="email"
+                id="tp-email"
+                name="tp-email"
+                placeholder="your.email@example.com"
+                autocomplete="email"
+                required
+              />
+
+              <label for="tp-topic">Topic</label>
+              <input
+                type="text"
+                id="tp-topic"
+                name="tp-topic"
+                placeholder="Area of interest or collaboration topic"
+                required
+              />
+
+              <label for="tp-message">Message</label>
+              <textarea
+                id="tp-message"
+                name="tp-message"
+                rows="6"
+                placeholder="Tell me what you would like to connect about."
+                required
+              ></textarea>
+
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Alternative contact method -->
+        <p class="contact-note">
+          You can also connect with me directly through
+          <a
+            href="https://www.linkedin.com/in/roscoegovan"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Page footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Roscoe Govan. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
+```
